@@ -1,0 +1,459 @@
+{
+  "info": {
+    "_postman_id": "blog-api-collection",
+    "name": "Blog API Collection",
+    "description": "Complete API collection for Blog project with Users, Blogs, Comments, and Profiles",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword123\",\n  \"role\": \"READER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/user/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "register"
+              ]
+            },
+            "description": "Register a new user with name, email, password, and role (READER, AUTHOR, ADMIN)"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/user/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "login"
+              ]
+            },
+            "description": "Login with email and password to get access token"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Authentication",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/is_auth",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user",
+                "is_auth"
+              ]
+            },
+            "description": "Check if user is authenticated using bearer token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blogs",
+      "item": [
+        {
+          "name": "Get All Blogs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blogs/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                ""
+              ]
+            },
+            "description": "Retrieve all blogs from the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Blog by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blogs/{{blog_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                "{{blog_id}}"
+              ]
+            },
+            "description": "Retrieve a specific blog by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Blog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Getting Started with FastAPI\",\n  \"introduction\": \"FastAPI is a modern web framework for building APIs with Python 3.7+\",\n  \"content\": \"This blog post covers the basics of FastAPI, including routing, dependency injection, and request validation.\",\n  \"conclusion\": \"FastAPI provides an excellent balance of performance, developer experience, and code quality.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/blogs/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                ""
+              ]
+            },
+            "description": "Create a new blog post (requires AUTHOR or ADMIN role)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Blog",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"introduction\": \"Updated introduction text\",\n  \"content\": \"Updated content\",\n  \"conclusion\": \"Updated conclusion\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/blogs/{{blog_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                "{{blog_id}}"
+              ]
+            },
+            "description": "Update an existing blog post (requires AUTHOR or ADMIN role)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Blog",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blogs/blog/{{blog_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                "blog",
+                "{{blog_id}}"
+              ]
+            },
+            "description": "Delete a blog post (requires AUTHOR or ADMIN role)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Add Comment to Blog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Great blog post! Very informative.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/blogs/{{blog_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                "{{blog_id}}"
+              ]
+            },
+            "description": "Add a comment to a specific blog post (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Comments by Blog ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/blogs/{{blog_id}}/comments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                "{{blog_id}}",
+                "comments"
+              ]
+            },
+            "description": "Retrieve all comments for a specific blog post"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blogs/comments/{{comment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "blogs",
+                "comments",
+                "{{comment_id}}"
+              ]
+            },
+            "description": "Delete a specific comment (requires authentication)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                "me"
+              ]
+            },
+            "description": "Retrieve the current user's profile (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bio\": \"I am a software developer passionate about FastAPI and Python.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/profile/edit",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                "edit"
+              ]
+            },
+            "description": "Update the current user's profile bio (requires authentication)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AI Generation",
+      "item": [
+        {
+          "name": "Generate Blog Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Getting Started with Machine Learning\",\n  \"style\": \"technical\",\n  \"length\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ai/generate-blog",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ai",
+                "generate-blog"
+              ]
+            },
+            "description": "Generate a blog post using AI based on topic and style (requires AUTHOR or ADMIN role)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            ""
+          ]
+        },
+        "description": "Check if the API is running and healthy"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string",
+      "description": "JWT access token received after login"
+    },
+    {
+      "key": "blog_id",
+      "value": "",
+      "type": "string",
+      "description": "UUID of a blog post"
+    },
+    {
+      "key": "comment_id",
+      "value": "",
+      "type": "string",
+      "description": "UUID of a comment"
+    }
+  ]
+}

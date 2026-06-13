@@ -1,0 +1,15 @@
+@"
+.env
+*.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.vscode/
+.idea/
+.pytest_cache/
+*.png
+*.jpg
+*.jpeg
+"@ | Out-File -Encoding ascii .gitignore

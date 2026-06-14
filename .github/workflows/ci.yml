@@ -37,4 +37,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: YOUR_DOCKER_USERNAME/blog-api:latest
+          tags: akshay455/blog-api:latest

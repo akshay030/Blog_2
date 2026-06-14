@@ -5,9 +5,20 @@
 
 __pycache__
 .pytest_cache
+.mypy_cache
 
 *.pyc
 *.pyo
 *.pyd
 
 .env
+.env.*
+
+alembic/__pycache__
+alembic/versions/__pycache__
+
+postgres_data
+redis_data
+
+README.md
+Blog_API_Collection.postman_collection.json

@@ -10,10 +10,11 @@ from src.profiles.models import ProfileModel
 from src.profiles.routes import profile_routes
 from src.llm.routes import ai_routes
 from src.utils.temp import test_routes
+from src.middleware.logging import LoggingMiddleware
 
 
 app= FastAPI()
-
+app.add_middleware(LoggingMiddleware)
 app.include_router(user_routes)
 app.include_router(blog_routes)
 app.include_router(comments_routes)

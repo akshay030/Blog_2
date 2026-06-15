@@ -1,0 +1,7 @@
+2026-06-15 11:40:21,485 | INFO | POST | /user/register | 200 | 3.008s
+2026-06-15 11:40:31,941 | INFO | POST | /user/login | 200 | 4.683s
+2026-06-15 11:42:16,184 | INFO | POST | /user/login | 200 | 2.998s
+2026-06-15 11:46:35,651 | INFO | IP=172.18.0.1 | POST | /user/login | 200 | 2.923s
+2026-06-15 11:46:43,653 | INFO | IP=172.18.0.1 | POST | /user/login | 200 | 0.857s
+2026-06-15 11:54:11,130 | INFO | IP=172.18.0.1 | USER=None | POST | /user/login | 200 | 4.746s
+2026-06-15 11:54:16,686 | INFO | IP=172.18.0.1 | USER=None | POST | /user/register | 400 | 0.022s

@@ -8,7 +8,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request, call_next):
 
-        user_id = getattr(request.state, "user_id", None)
+        user_id = getattr(
+        request.state,
+        "user_id",
+        "ANONYMOUS"
+    )
 
         start_time = time.time()
 

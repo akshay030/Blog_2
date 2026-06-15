@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: blog-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: blog-api
+
+  template:
+    metadata:
+      labels:
+        app: blog-api
+
+    spec:
+      containers:
+        - name: blog-api
+
+          image: akshay455/blog-api:latest
+
+          ports:
+            - containerPort: 8000
+
+          envFrom:
+            - secretRef:
+                name: blog-secret
+
+            - configMapRef:
+                name: blog-config
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+                        

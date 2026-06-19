@@ -13,21 +13,6 @@ class UserRole(str, Enum):
     AUTHOR = "author"
     READER = "reader"
 
-
-# class BlogModel(TimestampMixin,Base):
-#     __tablename__ = "blog_table"
-
-#     id = Column(
-#         UUID(as_uuid=True),
-#         primary_key=True,
-#         default=uuid.uuid4
-#     )
-
-#     title = Column(String, nullable=False)
-#     introduction = Column(String, nullable=False)
-#     content = Column(String, nullable=False)
-#     conclusion = Column(String)
-#     user_id = Column(UUID, ForeignKey("user_table.id",ondelete="CASCADE"))
     
 class BlogModel(TimestampMixin, Base):
     __tablename__ = "blog_table"

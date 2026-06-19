@@ -13,9 +13,10 @@ from src.utils.temp import test_routes
 from src.middleware.logging import LoggingMiddleware
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
+from src.admin.routes import admin_routes
 
 from src.utils.limiter import limiter
-
+from src.admin.models import AuditLogModel,ApiRequestLogModel
 
 app= FastAPI()
 app.state.limiter = limiter
@@ -28,7 +29,7 @@ app.include_router(comments_routes)
 app.include_router(profile_routes)
 app.include_router(ai_routes)
 app.include_router(test_routes)
-
+app.include_router(admin_routes)
 @app.get("/")
 def health():
     return {

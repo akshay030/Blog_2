@@ -20,17 +20,18 @@ class GenerateBlogSchema(BaseModel):
     include_code_samples: bool = False
 
 
-class GeneratedBlogResponseSchema(BaseModel):
-    title: str
+# class GeneratedBlogResponseSchema(BaseModel):
+#     title: str
 
-    introduction: str
+#     introduction: str
 
-    content: str
+#     content: str
 
-    conclusion: str
+#     conclusion: str
 
-    score: float
-    
+#     score: float
+
+
 class GenerateBlogResponse(BaseModel):
 
     title: str
@@ -52,11 +53,14 @@ class GenerateBlogResponse(BaseModel):
     score: float
 
     feedback: str
-    
+
+
 # src/ai/writer_schema.py
+
 
 class PlannerOutput(BaseModel):
     queries: list[str]
+
 
 class BlogOutput(BaseModel):
     title: str
@@ -66,13 +70,13 @@ class BlogOutput(BaseModel):
     content: str
 
     conclusion: str
-    
+
     slug: str
     meta_description: str
     keywords: list[str]
     references: list[str]
-    
-    
+
+
 class EvaluationOutput(BaseModel):
     score: float
 

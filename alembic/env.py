@@ -8,6 +8,7 @@ from src.users.models import *
 from src.blogs.models import *
 from src.comments.models import *
 from src.profiles.models import *
+from src.admin.models import *
 from src.utils.settings import settings
 
 # this is the Alembic Config object, which provides

@@ -1,0 +1,16 @@
+[33m26b33ff[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m experimental background job implementation
+[33m1c1d329[m[33m ([m[1;31morigin/main[m[33m)[m added test coverage
+[33me44b15f[m added logging
+[33ma604e15[m remove kubernetes and jenkins setup
+[33mdb2baf0[m add jenkins pipeline
+[33m5340aaf[m kubernetes production setup
+[33mb57ada8[m docker username
+[33m1766609[m again
+[33m64c1d65[m na
+[33m3883a9c[m add docker hub deployment
+[33m447ebcd[m added ymal
+[33m08c5566[m fix check imports
+[33mb7e9c14[m add github actions
+[33m776b40e[m docker production setup
+[33m02b28da[m Docker step 1
+[33m7fb454d[m Initial commit

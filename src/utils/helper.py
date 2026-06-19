@@ -67,6 +67,8 @@ def is_authenticated(request: Request, db: Session = Depends(get_db)):
             f"session:{user.id}",
             1800
         )
+        request.state.user_id = str(user.id)
+
 
         return user
 

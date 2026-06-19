@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 import uuid
 
+
 class CommentSchema(BaseModel):
-    comment :str
-    
+    comment: str
+
+
 class CommentResponseSchema(BaseModel):
     id: uuid.UUID
     comment: str

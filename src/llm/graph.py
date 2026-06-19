@@ -4,8 +4,8 @@ from langchain_groq import ChatGroq
 import json
 from tavily import TavilyClient
 from src.utils.settings import settings
-from src.llm.schemas import BlogOutput,EvaluationOutput,PlannerOutput
-from langgraph.graph import StateGraph,END
+from src.llm.schemas import BlogOutput, EvaluationOutput, PlannerOutput
+from langgraph.graph import StateGraph, END
 from src.utils.settings import settings
 
 MIN_SCORE = 8.0
@@ -39,7 +39,7 @@ class BlogState(TypedDict):
     queries: List[str]
 
     sources: List[dict[str, Any]]
-    
+
     research_context: str
 
     # Generated Blog
@@ -50,13 +50,13 @@ class BlogState(TypedDict):
     content: str
 
     conclusion: str
-    
+
     slug: str
 
     meta_description: str
 
     keywords: List[str]
-    
+
     references: List[str]
 
     # Evaluation
@@ -68,11 +68,11 @@ class BlogState(TypedDict):
 
 
 def should_retry(state):
-    print("=" * 50)
-    print("RETRY CHECK")
+    # print("=" * 50)
+    # print("RETRY CHECK")
 
-    print(f"Score: {state['score']}")
-    print(f"Retries: {state['retries']}")
+    # print(f"Score: {state['score']}")
+    # print(f"Retries: {state['retries']}")
     if state["score"] >= MIN_SCORE:
         return "accepted"
 
@@ -84,23 +84,24 @@ def should_retry(state):
 
 tavily_client = TavilyClient(api_key=settings.TAVILY_API_KEY)
 
-planner_llm = ChatGroq(model="qwen/qwen3-32b", temperature=0.2,api_key=settings.GROQ_API_KEY)
+planner_llm = ChatGroq(
+    model="qwen/qwen3-32b", temperature=0.2, api_key=settings.GROQ_API_KEY
+)
 
-writer_llm = ChatGroq(model="qwen/qwen3-32b", temperature=0.2,api_key=settings.GROQ_API_KEY)
+writer_llm = ChatGroq(
+    model="qwen/qwen3-32b", temperature=0.2, api_key=settings.GROQ_API_KEY
+)
 
-evaluator_llm = ChatGroq(model="qwen/qwen3-32b", temperature=0,api_key=settings.GROQ_API_KEY)
+evaluator_llm = ChatGroq(
+    model="qwen/qwen3-32b", temperature=0, api_key=settings.GROQ_API_KEY
+)
 
 
 def planner_node(state):
-    
-    
-    structured_llm = planner_llm.with_structured_output(
-        PlannerOutput
-    )
-    print("=" * 50)
-    print("PLANNER NODE STARTED")
-    
 
+    structured_llm = planner_llm.with_structured_output(PlannerOutput)
+    # print("=" * 50)
+    # print("PLANNER NODE STARTED")
 
     prompt = f"""
     Generate 5 search queries.
@@ -128,33 +129,25 @@ def planner_node(state):
     """
 
     result = structured_llm.invoke(prompt)
-    print(f"Topic: {state['topic']}")
+    # print(f"Topic: {state['topic']}")
 
-    
+    # print("Generated Queries:")
+    # print(result.queries)
 
-    print("Generated Queries:")
-    print(result.queries)
-
-    print("PLANNER NODE COMPLETED")
-    print("=" * 50)
+    # print("PLANNER NODE COMPLETED")
+    # print("=" * 50)
 
     # result = json.loads(response.content)
-    
-    return {
-        "queries": result.queries
-    }
+
+    return {"queries": result.queries}
 
 
 def research_node(state):
-    print("=" * 50)
-    print("RESEARCH NODE STARTED")
-
-    
-
-    
+    # print("=" * 50)
+    # print("RESEARCH NODE STARTED")
 
     sources = []
-    
+
     seen_urls = set()
 
     for query in state["queries"]:
@@ -171,42 +164,32 @@ def research_node(state):
                     {
                         "title": result["title"],
                         "url": result["url"],
-                        "content": result["content"][:300]
+                        "content": result["content"][:300],
                     }
                 )
     sources = sources[:5]
 
     research_context = "\n\n".join(
         [
-            f"Title: {source['title']}\n"
-            f"Content: {source['content']}"
+            f"Title: {source['title']}\n" f"Content: {source['content']}"
             for source in sources
         ]
     )
 
-    print(f"Sources Found: {len(sources)}")
-    print(f"Research Context Length: {len(research_context)}")
+    # print(f"Sources Found: {len(sources)}")
+    # print(f"Research Context Length: {len(research_context)}")
 
-    print("RESEARCH NODE COMPLETED")
-    print("=" * 50)
+    # print("RESEARCH NODE COMPLETED")
+    # print("=" * 50)
 
-    return {
-        "sources": sources,
-        "research_context": research_context
-    }
+    return {"sources": sources, "research_context": research_context}
 
 
 def writer_node(state):
-    print("=" * 50)
-    print("WRITER NODE STARTED")
-
-    
-
-    
-
+    # print("=" * 50)
+    # print("WRITER NODE STARTED")
 
     structured_llm = writer_llm.with_structured_output(BlogOutput)
-    
 
     prompt = f"""
     Write a high quality blog.
@@ -285,41 +268,33 @@ def writer_node(state):
 """
 
     result = structured_llm.invoke(prompt)
-    print("Generated Title:")
-    print(result.title)
-    print("Generated SEO")
-    print("Slug:", result.slug)
-    print("Meta:", result.meta_description)
-    print("Keywords:", result.keywords)
+    # print("Generated Title:")
+    # print(result.title)
+    # print("Generated SEO")
+    # print("Slug:", result.slug)
+    # print("Meta:", result.meta_description)
+    # print("Keywords:", result.keywords)
 
-    print("WRITER NODE COMPLETED")
-    print("=" * 50)
-    
-    references = [
-    source["url"]
-    for source in state["sources"]
-]
+    # print("WRITER NODE COMPLETED")
+    # print("=" * 50)
+
+    references = [source["url"] for source in state["sources"]]
 
     return {
         "title": result.title,
         "introduction": result.introduction,
         "content": result.content,
         "conclusion": result.conclusion,
-        
         "slug": result.slug,
         "meta_description": result.meta_description,
         "keywords": result.keywords,
-        "references":references,
-        }
+        "references": references,
+    }
 
 
 def evaluator_node(state):
-    print("=" * 50)
-    print("EVALUATOR NODE STARTED")
-
-    
-
-    
+    # print("=" * 50)
+    # print("EVALUATOR NODE STARTED")
 
     structured_llm = evaluator_llm.with_structured_output(EvaluationOutput)
 
@@ -366,28 +341,24 @@ def evaluator_node(state):
     """
 
     result = structured_llm.invoke(prompt)
-    print(f"Score: {result.score}")
-    print(f"Feedback: {result.feedback}")
+    # print(f"Score: {result.score}")
+    # print(f"Feedback: {result.feedback}")
 
-    print("EVALUATOR NODE COMPLETED")
-    print("=" * 50)
+    # print("EVALUATOR NODE COMPLETED")
+    # print("=" * 50)
 
     return {"score": result.score, "feedback": result.feedback}
 
 
 def rewrite_node(state):
-    print("=" * 50)
-    print("REWRITE NODE STARTED")
+    # print("=" * 50)
+    # print("REWRITE NODE STARTED")
 
-    print("Previous Score:")
-    print(state["score"])
+    # print("Previous Score:")
+    # print(state["score"])
 
-    print("Feedback:")
-    print(state["feedback"])
-
-    
-
-    
+    # print("Feedback:")
+    # print(state["feedback"])
 
     structured_llm = writer_llm.with_structured_output(BlogOutput)
 
@@ -437,13 +408,10 @@ def rewrite_node(state):
     """
 
     result = structured_llm.invoke(prompt)
-    print("REWRITE NODE COMPLETED")
-    print("=" * 50)
-    
-    references = [
-    source["url"]
-    for source in state["sources"]
-]
+    # print("REWRITE NODE COMPLETED")
+    # print("=" * 50)
+
+    references = [source["url"] for source in state["sources"]]
 
     return {
         "title": result.title,
@@ -453,7 +421,7 @@ def rewrite_node(state):
         "slug": result.slug,
         "meta_description": result.meta_description,
         "keywords": result.keywords,
-        "references":references,
+        "references": references,
         "retries": state["retries"] + 1,
     }
 
@@ -486,6 +454,4 @@ builder.add_conditional_edges(
 
 builder.add_edge("rewrite", "evaluator")
 
-graph = builder.compile( name="blog_generation_graph")
-
-
+graph = builder.compile(name="blog_generation_graph")
